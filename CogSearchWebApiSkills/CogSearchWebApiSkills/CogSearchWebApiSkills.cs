@@ -2,7 +2,7 @@
 
 namespace CogSearchWebApiSkills
 {
-    public class Class1
+    public class CogSearchWebApiSkills
     {
     }
 }
