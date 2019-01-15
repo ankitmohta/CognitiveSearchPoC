@@ -65,10 +65,18 @@ namespace CogSearchInitializer
 
         private static async Task<bool> RunAsync()
         {
-            bool result = await DeleteIndexingResources();
+            bool result;
+            result = await DeleteIndexingResources();
+            if (!result)
+                return result;
+            result = await CreateBlobContainerForImageStore();
+            if (!result)
+                return result;
+
 
             return result;
         }
+
 
         /*
          * This function deletes all of the following indexing resources if they exist:
@@ -95,7 +103,37 @@ namespace CogSearchInitializer
             return true;
         }
 
+        /*
+         * This function creates a blob container on Azure for the document preview image store
+         * if it does not already exist.
+         * Sets the access permissions for eht container to public.
+         */
+        private static async Task<bool> CreateBlobContainerForImageStore()
+        {
+            Console.WriteLine("Creating Blob Container to Store File Preview Images from the Image Store Skill...");
+            try
+            {
+                CloudStorageAccount imageStorageAccount = CloudStorageAccount.Parse(keys.BlobStorageAccountConnectionString1);
+                CloudBlobClient imageStoreClient = imageStorageAccount.CreateCloudBlobClient();
+                CloudBlobContainer imageStoreContainer = imageStoreClient.GetContainerReference(BlobContainerNameForImageStore);
 
+                await imageStoreContainer.CreateIfNotExistsAsync();
+
+                //Set Access Permissions for the Image Store to public
+                BlobContainerPermissions permissions = await imageStoreContainer.GetPermissionsAsync();
+                permissions.PublicAccess = BlobContainerPublicAccessType.Container;
+                await imageStoreContainer.SetPermissionsAsync(permissions);
+            }
+            catch (Exception ex)
+            {
+                if (DebugMode)
+                {
+                    Console.WriteLine("ERROR CREATING BLOB CONTAINER FOR IMAGE STORE: " + ex.Message + "\n\n" + ex.StackTrace);
+                }
+                return false;
+            }
+            return true;
+        }
     }
 
 }
