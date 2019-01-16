@@ -1,2 +1,2 @@
 # Description of PoC
-![](Cognitive Search PoC.png)
+![](https://github.com/YASH-CALM/CognitiveSearchPoC.git/Cognitive\ Search\ PoC.png)
