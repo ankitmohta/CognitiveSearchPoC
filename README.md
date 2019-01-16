@@ -1,2 +1,2 @@
 # Description of PoC
-![Blah](https://raw.githubusercontent.com/YASH-CALM/CognitiveSearchPoC/CogSearchSimpleDFD.png)
+![Simple Data Flow Diagram](https://raw.github.com/YASH-CALM/CognitiveSearchPoC/CogSearchSimpleDFD.png)
