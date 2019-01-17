@@ -170,6 +170,10 @@ namespace CogSearchInitializer
         return true;
         }
 
+        /*
+         * This function creates the skillset
+         * 
+         */ 
         private static async Task<bool> CreateSkillSet()
         {
             Console.WriteLine("Creating Skill Set...");
@@ -179,7 +183,36 @@ namespace CogSearchInitializer
                 {
                     _azureFunctionHostKey = await Keys.GetAzureFunctionHostKey(_httpClient);
                 }
+                using (StreamReader r = new StreamReader("skillset.json"))
+                {
+                    string json = r.ReadToEnd();
+                    json = json.Replace("[AzureFunctionEndpointUrl]", String.Format("https://{0}.azurewebsites.net", keys.AzureFunctionSiteName1));
+                    json = json.Replace("[AzureFunctionDefaultHostKey]", _azureFunctionHostKey);
+                    json = json.Replace("[BlobContainerName]", BlobContainerNameForImageStore);
+                    string uri = String.Format("{0}/skillsets/{1}?api-version=2017-11-11-Preview", _searchServiceEndpoint, SkillSetName);
+                    HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                    HttpResponseMessage response = await _httpClient.PutAsync(uri, content);
+
+                    if (DebugMode)
+                    {
+                        string responseText = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine("Response from creating skill set: " + responseText);
+                    }
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return false;
+                    }
+                }
             }
+            catch (Exception ex)
+            {
+                if(DebugMode)
+                {
+                    Console.WriteLine("ERROR CREATING SKILLSET: " + ex.Message + "\n\n" + ex.StackTrace);
+                }
+                return false;
+            }
+            return true;
         }
     }
 
