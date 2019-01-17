@@ -35,7 +35,7 @@ namespace CogSearchInitializer
         private const string BlobContainerNameForImageStore = "imagestoreblob";
 
         //Keys and info for cloud resource configuration
-        private static keys keys = new keys();
+        private static Keys keys = new Keys();
 
         //Set to false to to disable debug information
         private static bool DebugMode = true;
@@ -72,9 +72,11 @@ namespace CogSearchInitializer
             result = await CreateBlobContainerForImageStore();
             if (!result)
                 return result;
-            result = await CreateDocumentDataSource();
+            result = await CreateDocumentsDataSource();
             if (!result)
-
+                return result;
+            result = await CreateSkillSet();
+            if (!result)
                 return result;
 
             return result;
@@ -137,11 +139,48 @@ namespace CogSearchInitializer
             }
             return true;
         }
-    }
 
-    private static async Task<bool> CreateDocumentsDataSource()
-    {
+        /*
+         * This function creates the datasource in which the documents are stored in.
+         * It also links the datasource to the Azure Search resources.
+         */
+        private static async Task<bool> CreateDocumentsDataSource()
+        {
+            Console.WriteLine("Creating Data Source for Documents...");
+            try
+            {
+                DataSource dataSource = DataSource.AzureBlobStorage(
+                    name: DataSourceName,
+                    storageConnectionString: keys.FilesStorageAccountConnectionString1,
+                    containerName: keys.FilesBlobContainerName1,
+                    description: "Data source for Cognitive Search Demo."
+                    );
+
+                //Link datasource to Azure Search
+                await _searchClient.DataSources.CreateAsync(dataSource);
+            }
+            catch (Exception ex)
+            {
+                if (DebugMode)
+                {
+                    Console.WriteLine("Error Creating the Document Data Source: " + ex.Message + "\n\n" + ex.StackTrace);
+                }
+                return false;
+            }
         return true;
+        }
+
+        private static async Task<bool> CreateSkillSet()
+        {
+            Console.WriteLine("Creating Skill Set...");
+            try
+            {
+                if(_azureFunctionHostKey == null)
+                {
+                    _azureFunctionHostKey = await Keys.GetAzureFunctionHostKey(_httpClient);
+                }
+            }
+        }
     }
 
 }
