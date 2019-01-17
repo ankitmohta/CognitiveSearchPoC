@@ -72,7 +72,10 @@ namespace CogSearchInitializer
             result = await CreateBlobContainerForImageStore();
             if (!result)
                 return result;
+            result = await CreateDocumentDataSource();
+            if (!result)
 
+                return result;
 
             return result;
         }
@@ -134,6 +137,11 @@ namespace CogSearchInitializer
             }
             return true;
         }
+    }
+
+    private static async Task<bool> CreateDocumentsDataSource()
+    {
+        return true;
     }
 
 }
