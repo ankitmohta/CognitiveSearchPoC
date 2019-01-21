@@ -3,21 +3,15 @@
  * Author: Neel Patel
  */
 
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.IO.Compression;
-using System.Linq;
-using System.Text;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Azure.Search;
 using Microsoft.Azure.Search.Models;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
-using Newtonsoft.Json.Linq;
+using System;
+using System.IO;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 
 
 namespace CogSearchInitializer
@@ -76,6 +70,12 @@ namespace CogSearchInitializer
             if (!result)
                 return result;
             result = await CreateSkillSet();
+            if (!result)
+                return result;
+            result = await CreateSynonyms();
+            if (!result)
+                return result;
+            result = await CreateIndex();
             if (!result)
                 return result;
 
@@ -209,6 +209,67 @@ namespace CogSearchInitializer
                 if(DebugMode)
                 {
                     Console.WriteLine("ERROR CREATING SKILLSET: " + ex.Message + "\n\n" + ex.StackTrace);
+                }
+                return false;
+            }
+            return true;
+        }
+
+        /*
+         * This method creates the synoyms used by Azure Search
+         * 
+         */ 
+        private static async Task<bool> CreateSynonyms()
+        {
+            Console.WriteLine("Creating Synonym Map...");
+            try
+            {
+                SynonymMap synonyms = new SynonymMap(SynonymMapName, SynonymMapFormat.Solr, @"");
+                await _searchClient.SynonymMaps.CreateAsync(synonyms);
+            }
+            catch (Exception ex)
+            {
+                if (DebugMode)
+                {
+                    Console.WriteLine("ERROR CREATING SYNONYM MAP: " + ex.Message + "\n\n" + ex.StackTrace);
+                }
+                return false;
+            }
+            return true;
+        }
+
+        /*
+         * This function creates the index in the Azure Search Service
+         * and replaces SynonymMapName in index.json
+         */ 
+        private static async Task<bool> CreateIndex()
+        {
+            Console.WriteLine("Creating Index...");
+            try
+            {
+                using(StreamReader r = new StreamReader("index.json"))
+                {
+                    string json = r.ReadToEnd();
+                    json = json.Replace("[SynonymMapName", SynonymMapName);
+                    string uri = String.Format("{0}/indexes/{1}?api-version=2017-11-11-Preview", _searchServiceEndpoint, IndexName);
+                    HttpContent content = new StringContent(json, Encoding.UTF8, "application.json");
+                    HttpResponseMessage response = await _httpClient.PutAsync(uri, content);
+                    if (DebugMode)
+                    {
+                        string responseText = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine("Create Index Response: " + responseText);
+                    }
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                if (DebugMode)
+                {
+                    Console.WriteLine("ERROR CREATING INDEX: " + ex.Message + "/n/n" + ex.StackTrace);
                 }
                 return false;
             }
