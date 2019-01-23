@@ -11,6 +11,7 @@ using System;
 using System.IO;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -54,10 +55,25 @@ namespace CogSearchInitializer
             _httpClient.DefaultRequestHeaders.Add("api-key", searchServiceApiKey);
             _searchServiceEndpoint = String.Format("https://{0}.{1}", searchServiceName, _searchClient.SearchDnsSuffix);
 
-            //bool result = RunAsync()
+            bool result = RunInitializerAsync().GetAwaiter().GetResult();
+            if (!result)
+            {
+                Console.WriteLine("ERROR: ENABLE DEBUG MODE TO SEE DETAILS");
+            }
+            else
+            {
+                Console.WriteLine("SUCCESS: ALL OPERATIONS COMPLETED SUCCESSFULLY");
+            }
+            Console.WriteLine("PRESS ANY KEY TO EXIT");
+            Console.ReadKey();
         }
 
-        private static async Task<bool> RunAsync()
+
+        /*
+         * This function controls the operations of the initializer
+         * for cognitive search
+         */
+        private static async Task<bool> RunInitializerAsync()
         {
             bool result;
             result = await DeleteIndexingResources();
@@ -78,6 +94,13 @@ namespace CogSearchInitializer
             result = await CreateIndex();
             if (!result)
                 return result;
+            result = await CreateIndexer();
+            if (!result)
+                return result;
+            result = await CheckIndexerStatus();
+            if (!result)
+                return result;
+
 
             return result;
         }
@@ -167,19 +190,19 @@ namespace CogSearchInitializer
                 }
                 return false;
             }
-        return true;
+            return true;
         }
 
         /*
          * This function creates the skillset
          * 
-         */ 
+         */
         private static async Task<bool> CreateSkillSet()
         {
             Console.WriteLine("Creating Skill Set...");
             try
             {
-                if(_azureFunctionHostKey == null)
+                if (_azureFunctionHostKey == null)
                 {
                     _azureFunctionHostKey = await Keys.GetAzureFunctionHostKey(_httpClient);
                 }
@@ -206,7 +229,7 @@ namespace CogSearchInitializer
             }
             catch (Exception ex)
             {
-                if(DebugMode)
+                if (DebugMode)
                 {
                     Console.WriteLine("ERROR CREATING SKILLSET: " + ex.Message + "\n\n" + ex.StackTrace);
                 }
@@ -218,7 +241,7 @@ namespace CogSearchInitializer
         /*
          * This method creates the synoyms used by Azure Search
          * 
-         */ 
+         */
         private static async Task<bool> CreateSynonyms()
         {
             Console.WriteLine("Creating Synonym Map...");
@@ -241,13 +264,13 @@ namespace CogSearchInitializer
         /*
          * This function creates the index in the Azure Search Service
          * and replaces SynonymMapName in index.json
-         */ 
+         */
         private static async Task<bool> CreateIndex()
         {
             Console.WriteLine("Creating Index...");
             try
             {
-                using(StreamReader r = new StreamReader("index.json"))
+                using (StreamReader r = new StreamReader("index.json"))
                 {
                     string json = r.ReadToEnd();
                     json = json.Replace("[SynonymMapName", SynonymMapName);
@@ -275,7 +298,82 @@ namespace CogSearchInitializer
             }
             return true;
         }
-    }
 
+
+        /*
+         * This function creates the indexer for azure search
+         * It replaces the IndexerName, DataSourceName, IndexName, and SkillsetName in the indexer.json file
+         */
+        private static async Task<bool> CreateIndexer()
+        {
+            Console.WriteLine("Creating Indexer...");
+            try
+            {
+                using (StreamReader r = new StreamReader("indexer.json"))
+                {
+                    string json = r.ReadToEnd();
+                    json = json.Replace("[IndexerName]", IndexerName);
+                    json = json.Replace("[DataSourceName]", DataSourceName);
+                    json = json.Replace("[IndexName]", IndexName);
+                    json = json.Replace("[SkillsetName]", SkillSetName);
+                    string uri = String.Format("{0}/indexers/{1}?api-version=2017-11-11-Preview", _searchServiceEndpoint, IndexerName);
+                    HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                    HttpResponseMessage response = await _httpClient.PutAsync(uri, content);
+                    if (DebugMode)
+                    {
+                        string responsetext = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine("Create Indexer response: \n{0}", responsetext);
+                    }
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                if (DebugMode)
+                {
+                    Console.WriteLine("Error creating idexer: {0}", ex.Message);
+                }
+                return false;
+            }
+            return true;
+        }
+
+        /*
+         * This function checks the status of the indexer every 5 seconds
+         * and writes the current status to the console
+         */
+        private static async Task<bool> CheckIndexerStatus()
+        {
+            Console.WriteLine("Waiting for indexing to complete...");
+            IndexerExecutionStatus requestStatus = IndexerExecutionStatus.InProgress;
+            try
+            {
+                await _searchClient.Indexers.GetAsync(IndexerName);
+                while (requestStatus.Equals(IndexerExecutionStatus.InProgress))
+                {
+                    Thread.Sleep(5000);
+                    IndexerExecutionInfo info = await _searchClient.Indexers.GetStatusAsync(IndexerName);
+                    requestStatus = info.LastResult.Status;
+                    if (DebugMode)
+                    {
+                        Console.WriteLine("Indexer Status: " + requestStatus.ToString());
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                if (DebugMode)
+                {
+                    Console.WriteLine("ERROR RETREIVING INDEXER STATUS: " + ex.Message + "\n\n" + ex.StackTrace);
+                }
+                return false;
+            }
+            return requestStatus.Equals(IndexerExecutionStatus.Success);
+        }
+    }
 }
 
