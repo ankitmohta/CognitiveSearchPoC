@@ -30,7 +30,13 @@ namespace CogSearchWebApiSkills
             }
             string searchServiceName = keys.SearchServiceName1;
             string searchServiceApiKey = keys.SearchServiceApiKey1;
-            string indexName = String.IsNullOrEmpty(req.Headers["IndexName"]) ? keys.
+            string indexName = String.IsNullOrEmpty(req.Headers["IndexName"]) ? Config.AZURE_SEARCH_INDEX_NAME : (string)req.Headers["IndexName"];
+            if (string.IsNullOrEmpty(searchServiceName) || String.IsNullOrEmpty(searchServiceApiKey) || string.IsNullOrEmpty(indexName)){
+                return new BadRequestObjectResult($"{skillName} - Information for the search service is missing");
+            }
+            SearchClientHelper searchClient = new SearchClientHelper(searchServiceName, searchServiceApiKey, indexName);
+
         }
     }
 }
+
