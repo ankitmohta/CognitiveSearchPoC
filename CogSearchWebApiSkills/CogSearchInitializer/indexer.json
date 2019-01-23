@@ -34,6 +34,14 @@
             "targetFieldName": "text"
         },
         {
+            "sourceFieldName": "/document/languageCode",
+            "targetFieldName": "languageCode"
+        },
+        {
+            "sourceFieldName": "/document/translatedText",
+            "targetFieldName": "translatedText"
+        },
+        {
             "sourceFieldName": "/document/hocrDocument/metadata",
             "targetFieldName": "metadata"
         },
@@ -42,12 +50,12 @@
             "targetFieldName": "entities"
         },
         {
-            "sourceFieldName": "/document/cryptonyms",
-            "targetFieldName": "cryptonyms"
+            "sourceFieldName": "/document/finalText/pages/*/locations/*/value",
+            "targetFieldName": "locations"
         },
         {
-            "sourceFieldName": "/document/translatedText",
-            "targetFieldName": "translatedText"
-        } 
+            "sourceFieldName": "/document/cryptonyms",
+            "targetFieldName": "cryptonyms"
+        }
     ]
 }
