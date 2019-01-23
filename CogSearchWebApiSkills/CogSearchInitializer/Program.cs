@@ -1,5 +1,5 @@
 ﻿/*
- * Description: Program to initialize the resources required to run cognitive search based on Microsoft's JFK Files Demo
+ * Description: Application to initialize the resources required to run cognitive search based on Microsoft's JFK Files Demo
  * Author: Neel Patel
  */
 
@@ -21,6 +21,7 @@ namespace CogSearchInitializer
     {
         /*
          * Names for cloud resource configuration
+         * IF YOU CHANGE THESE VALUES YOU MUST ALSO CHANGE THEM IN THE CogSearchWebApiSkills IN THE Config.cs FILE
          */
         private const string DataSourceName = "datasource";
         private const string IndexName = "index";
