@@ -31,12 +31,20 @@ namespace CogSearchWebApiSkills
             string searchServiceName = keys.SearchServiceName1;
             string searchServiceApiKey = keys.SearchServiceApiKey1;
             string indexName = String.IsNullOrEmpty(req.Headers["IndexName"]) ? Config.AZURE_SEARCH_INDEX_NAME : (string)req.Headers["IndexName"];
-            if (string.IsNullOrEmpty(searchServiceName) || String.IsNullOrEmpty(searchServiceApiKey) || string.IsNullOrEmpty(indexName)){
+            if (string.IsNullOrEmpty(searchServiceName) || String.IsNullOrEmpty(searchServiceApiKey) || string.IsNullOrEmpty(indexName)) {
                 return new BadRequestObjectResult($"{skillName} - Information for the search service is missing");
             }
             SearchClientHelper searchClient = new SearchClientHelper(searchServiceName, searchServiceApiKey, indexName);
 
+            FacetGraphGenerator facetGraphGenerator = new FacetGraphGenerator(searchClient);
+            string query = string.IsNullOrEmpty(req.Query["q"].FirstOrDefault()) ? "*" : req.Query["q"].First();
+            string facet = string.IsNullOrEmpty(req.Query["f"].FirstOrDefault()) ? "entities" : req.Query["f"].First();
+            JObject facetGraph = facetGraphGenerator.GetFacetGraphNodes(query, facet);
+
+            return (ActionResult)new OkObjectResult(facetGraph);
         }
+
+
     }
 }
 

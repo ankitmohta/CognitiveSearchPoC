@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using Microsoft.Azure.Search;
 using Microsoft.Azure.Search.Models;
 
-namespace CogSearchWebApiSkills.AzureSearch
+namespace CogSearchWebApiSkills
 {
     public class SearchClientHelper
     {
         private static SearchServiceClient _searchClient;
         private string IndexName;
-        private static string errorMessage;
+        public static string errorMessage;
 
         public SearchClientHelper(string serviceName, string apiKey, string indexName)
         {
