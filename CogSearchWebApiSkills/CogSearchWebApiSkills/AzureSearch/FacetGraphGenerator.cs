@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.Azure.Search.Models;
 using Newtonsoft.Json.Linq;
 
-namespace CogSearchWebApiSkills
+namespace CogSearchWebApiSkills.FacetGraphGeneratorSkill
 {
     public class FacetGraphGenerator
     {

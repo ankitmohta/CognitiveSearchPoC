@@ -4,9 +4,10 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using CogSearchWebApiSkills.WebApiSkills;
+using CogSearchWebApiSkills.FacetGraphGeneratorSkill;
 using CogSearchWebApiSkills.CryptonymsSkill;
 using CogSearchWebApiSkills.ImageStoreSkill;
-using Microsoft.CognitiveSearch.Skills.Hocr;
+using CogSearchWebApiSkills.HocrGeneratorSkill;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -124,6 +125,38 @@ namespace CogSearchWebApiSkills
                     string imageData = inRecord.Data["imageData"] as string;
                     string imageUri = await imageStore.UploadToBlob(imageData, Guid.NewGuid().ToString());
                     outRecord.Data["imageStoreUri"] = imageUri;
+                    return outRecord;
+                });
+
+            return (ActionResult)new OkObjectResult(response);
+        }
+
+        [FunctionName("hocr-generator")]
+        public static IActionResult RunHocrGenerator([HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]HttpRequest req, TraceWriter log, ExecutionContext executionContext)
+        {
+            string skillName = executionContext.FunctionName;
+            IEnumerable<WebApiRequestRecord> requestRecords = WebApiSkillHelpers.GetRequestRecords(req);
+            if (requestRecords == null || requestRecords.Count() != 1)
+            {
+                return new BadRequestObjectResult($"{skillName} - Invalid request record array: Skill requires exactly 1 image per request.");
+            }
+
+            WebApiSkillResponse response = WebApiSkillHelpers.ProcessRequestRecords(skillName, requestRecords,
+                (inRecord, outRecord) => {
+                    List<OcrImageMetadata> imageMetadataList = JsonConvert.DeserializeObject<List<OcrImageMetadata>>(JsonConvert.SerializeObject(inRecord.Data["ocrImageMetadataList"]));
+                    Dictionary<string, string> annotations = JsonConvert.DeserializeObject<JArray>(JsonConvert.SerializeObject(inRecord.Data["wordAnnotations"]))
+                                                    .Where(o => o.Type != JTokenType.Null)
+                                                    .GroupBy(o => o["value"].Value<string>())
+                                                    .Select(g => g.First())
+                                                    .ToDictionary(o => o["value"].Value<string>(), o => o["description"].Value<string>());
+
+                    List<HocrPage> pages = new List<HocrPage>();
+                    for (int i = 0; i < imageMetadataList.Count; i++)
+                    {
+                        pages.Add(new HocrPage(imageMetadataList[i], i, annotations));
+                    }
+                    HocrDocument hocrDocument = new HocrDocument(pages);
+                    outRecord.Data["hocrDocument"] = hocrDocument;
                     return outRecord;
                 });
 
