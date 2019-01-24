@@ -69,6 +69,37 @@ namespace CogSearchWebApiSkills
 
             return (ActionResult)new OkObjectResult(response);
         }
+
+        [FunctionName("link-cryptonyms-list")]
+        public static IActionResult RunCryptonymLinkerForLists([HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]HttpRequest req, TraceWriter log, ExecutionContext executionContext)
+        {
+            string skillName = executionContext.FunctionName;
+            IEnumerable<WebApiRequestRecord> requestRecords = WebApiSkillHelpers.GetRequestRecords(req);
+            if (requestRecords == null)
+            {
+                return new BadRequestObjectResult($"{skillName} - Invalid request record array.");
+            }
+
+            CryptonymLinker cryptonymLinker = new CryptonymLinker(executionContext.FunctionAppDirectory);
+            WebApiSkillResponse response = WebApiSkillHelpers.ProcessRequestRecords(skillName, requestRecords,
+                (inRecord, outRecord) => {
+                    var words = JsonConvert.DeserializeObject<JArray>(JsonConvert.SerializeObject(inRecord.Data["words"]));
+                    var cryptos = words.Select(jword =>
+                    {
+                        var word = jword.Value<string>();
+                        if (word.All(Char.IsUpper) && cryptonymLinker.Cryptonyms.TryGetValue(word, out string description))
+                        {
+                            return new { value = word, description };
+                        }
+                        return null;
+                    });
+
+                    outRecord.Data["cryptonyms"] = cryptos.ToArray();
+                    return outRecord;
+                });
+
+            return (ActionResult)new OkObjectResult(response);
+        }
     }
 }
 

@@ -16,7 +16,7 @@ namespace CogSearchWebApiSkills.WebApiSkills
             return docs.Values;
         }
 
-        public static WebApiSkillResponse PorcessRequestRecords(string functionName, IEnumerable<WebApiRequestRecord> requestRecords, Func<WebApiRequestRecord, WebApiResponseRecord, WebApiResponseRecord> processRecord)
+        public static WebApiSkillResponse ProcessRequestRecords(string functionName, IEnumerable<WebApiRequestRecord> requestRecords, Func<WebApiRequestRecord, WebApiResponseRecord, WebApiResponseRecord> processRecord)
         {
             WebApiSkillResponse response = new WebApiSkillResponse();
             foreach (WebApiRequestRecord inRecord in requestRecords)
