@@ -1,17 +1,18 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
-using Microsoft.CognitiveSearch.Search;
-using Microsoft.CognitiveSearch.Skills.Cryptonyms;
+using CogSearchWebApiSkills.WebApiSkills;
+using CogSearchWebApiSkills.Cryptonyms;
 using Microsoft.CognitiveSearch.Skills.Hocr;
 using Microsoft.CognitiveSearch.Skills.Image;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 
 
@@ -45,6 +46,29 @@ namespace CogSearchWebApiSkills
         }
 
 
+        [FunctionName("link-cryptonyms")]
+        public static IActionResult RunCryptonymLinker([HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]HttpRequest req, TraceWriter log, ExecutionContext executionContext)
+        {
+            string skillName = executionContext.FunctionName;
+            IEnumerable<WebApiRequestRecord> requestRecords = WebApiSkillHelpers.GetRequestRecords(req);
+            if (requestRecords == null)
+            {
+                return new BadRequestObjectResult($"{skillName} - Invalid request record array.");
+            }
+
+            CryptonymLinker cryptonymLinker = new CryptonymLinker(executionContext.FunctionAppDirectory);
+            WebApiSkillResponse response = WebApiSkillHelpers.ProcessRequestRecords(skillName, requestRecords,
+                (inRecord, outRecord) => {
+                    string word = inRecord.Data["word"] as string;
+                    if (word.All(Char.IsUpper) && cryptonymLinker.Cryptonyms.TryGetValue(word, out string description))
+                    {
+                        outRecord.Data["cryptonym"] = new { value = word, description };
+                    }
+                    return outRecord;
+                });
+
+            return (ActionResult)new OkObjectResult(response);
+        }
     }
 }
 
