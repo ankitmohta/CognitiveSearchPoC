@@ -4,9 +4,9 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using CogSearchWebApiSkills.WebApiSkills;
-using CogSearchWebApiSkills.Cryptonyms;
+using CogSearchWebApiSkills.CryptonymsSkill;
+using CogSearchWebApiSkills.ImageStoreSkill;
 using Microsoft.CognitiveSearch.Skills.Hocr;
-using Microsoft.CognitiveSearch.Skills.Image;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -95,6 +95,35 @@ namespace CogSearchWebApiSkills
                     });
 
                     outRecord.Data["cryptonyms"] = cryptos.ToArray();
+                    return outRecord;
+                });
+
+            return (ActionResult)new OkObjectResult(response);
+        }
+
+        [FunctionName("image-store")]
+        public static async Task<IActionResult> RunImageStore([HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]HttpRequest req, TraceWriter log, ExecutionContext executionContext)
+        {
+            string skillName = executionContext.FunctionName;
+            IEnumerable<WebApiRequestRecord> requestRecords = WebApiSkillHelpers.GetRequestRecords(req);
+            if (requestRecords == null || requestRecords.Count() != 1)
+            {
+                return new BadRequestObjectResult($"{skillName} - Invalid request record array: Skill requires exactly 1 image per request.");
+            }
+
+            string blobStorageConnectionString = keys.BlobStorageAccountConnectionString1;
+            string blobContainerName = String.IsNullOrEmpty(req.Headers["BlobContainerName"]) ? Config.AZURE_STORAGE_CONTAINER_NAME : (string)req.Headers["BlobContainerName"];
+            if (String.IsNullOrEmpty(blobStorageConnectionString) || String.IsNullOrEmpty(blobContainerName))
+            {
+                return new BadRequestObjectResult($"{skillName} - Information for the blob storage account is missing");
+            }
+            ImageStore imageStore = new ImageStore(blobStorageConnectionString, blobContainerName);
+
+            WebApiSkillResponse response = await WebApiSkillHelpers.ProcessRequestRecordsAsync(skillName, requestRecords,
+                async (inRecord, outRecord) => {
+                    string imageData = inRecord.Data["imageData"] as string;
+                    string imageUri = await imageStore.UploadToBlob(imageData, Guid.NewGuid().ToString());
+                    outRecord.Data["imageStoreUri"] = imageUri;
                     return outRecord;
                 });
 

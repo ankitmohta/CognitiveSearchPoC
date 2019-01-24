@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 
-namespace CogSearchWebApiSkills.CryptonymLinker
+namespace CogSearchWebApiSkills.CryptonymsSkill
 {
     class CryptonymLinker
     {
