@@ -49,8 +49,8 @@ namespace CogSearchInitializer
 
         static void Main(string[] args)
         {
-            string searchServiceName = keys.SearchServiceName1;
-            string searchServiceApiKey = keys.SearchServiceApiKey1;
+            string searchServiceName = keys.GetSearchServiceName();
+            string searchServiceApiKey = keys.GetSearchServiceApiKey();
 
             _searchClient = new SearchServiceClient(searchServiceName, new SearchCredentials(searchServiceApiKey));
             _httpClient.DefaultRequestHeaders.Add("api-key", searchServiceApiKey);
@@ -142,7 +142,7 @@ namespace CogSearchInitializer
             Console.WriteLine("Creating Blob Container to Store File Preview Images from the Image Store Skill...");
             try
             {
-                CloudStorageAccount imageStorageAccount = CloudStorageAccount.Parse(keys.BlobStorageAccountConnectionString1);
+                CloudStorageAccount imageStorageAccount = CloudStorageAccount.Parse(keys.GetBlobStorageAccountConnectionString());
                 CloudBlobClient imageStoreClient = imageStorageAccount.CreateCloudBlobClient();
                 CloudBlobContainer imageStoreContainer = imageStoreClient.GetContainerReference(BlobContainerNameForImageStore);
 
@@ -175,8 +175,8 @@ namespace CogSearchInitializer
             {
                 DataSource dataSource = DataSource.AzureBlobStorage(
                     name: DataSourceName,
-                    storageConnectionString: keys.FilesStorageAccountConnectionString1,
-                    containerName: keys.FilesBlobContainerName1,
+                    storageConnectionString: keys.GetFilesStorageAccountConnectionString(),
+                    containerName: keys.GetFilesBlobContainerName(),
                     description: "Data source for Cognitive Search Demo."
                     );
 
@@ -210,7 +210,7 @@ namespace CogSearchInitializer
                 using (StreamReader r = new StreamReader("skillset.json"))
                 {
                     string json = r.ReadToEnd();
-                    json = json.Replace("[AzureFunctionEndpointUrl]", String.Format("https://{0}.azurewebsites.net", keys.AzureFunctionSiteName1));
+                    json = json.Replace("[AzureFunctionEndpointUrl]", String.Format("https://{0}.azurewebsites.net", keys.GetAzureFunctionSiteName()));
                     json = json.Replace("[AzureFunctionDefaultHostKey]", _azureFunctionHostKey);
                     json = json.Replace("[BlobContainerName]", BlobContainerNameForImageStore);
                     string uri = String.Format("{0}/skillsets/{1}?api-version=2017-11-11-Preview", _searchServiceEndpoint, SkillSetName);

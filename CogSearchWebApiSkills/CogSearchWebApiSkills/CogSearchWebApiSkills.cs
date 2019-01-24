@@ -25,15 +25,15 @@ namespace CogSearchWebApiSkills
     {
         private static Keys keys = new Keys();
         [FunctionName("facet-graph-nodes")]
-        public static IActionResult GetFacetGraphNodes([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]HttpRequest req, TraceWriter log, TraceWriter log, ExecutionContext executionContext)
+        public static IActionResult GetFacetGraphNodes([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]HttpRequest req, TraceWriter log, ExecutionContext executionContext)
         {
             string skillName = executionContext.FunctionName;
             if (!req.QueryString.HasValue)
             {
                 return new BadRequestObjectResult($"{skillName} - Requires a query string in the following format: q=SEARCHTERM&f=entities");
             }
-            string searchServiceName = keys.SearchServiceName1;
-            string searchServiceApiKey = keys.SearchServiceApiKey1;
+            string searchServiceName = keys.GetSearchServiceName();
+            string searchServiceApiKey = keys.GetSearchServiceApiKey();
             string indexName = String.IsNullOrEmpty(req.Headers["IndexName"]) ? Config.AZURE_SEARCH_INDEX_NAME : (string)req.Headers["IndexName"];
             if (string.IsNullOrEmpty(searchServiceName) || String.IsNullOrEmpty(searchServiceApiKey) || string.IsNullOrEmpty(indexName))
             {
@@ -117,7 +117,7 @@ namespace CogSearchWebApiSkills
                 return new BadRequestObjectResult($"{skillName} - Invalid request record array: Skill requires exactly 1 image per request.");
             }
 
-            string blobStorageConnectionString = keys.BlobStorageAccountConnectionString1;
+            string blobStorageConnectionString = keys.GetBlobStorageAccountConnectionString();
             string blobContainerName = String.IsNullOrEmpty(req.Headers["BlobContainerName"]) ? Config.AZURE_STORAGE_CONTAINER_NAME : (string)req.Headers["BlobContainerName"];
             if (String.IsNullOrEmpty(blobStorageConnectionString) || String.IsNullOrEmpty(blobContainerName))
             {
