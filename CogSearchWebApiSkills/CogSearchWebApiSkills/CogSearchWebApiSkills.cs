@@ -8,12 +8,14 @@ using CogSearchWebApiSkills.FacetGraphGeneratorSkill;
 using CogSearchWebApiSkills.CryptonymsSkill;
 using CogSearchWebApiSkills.ImageStoreSkill;
 using CogSearchWebApiSkills.HocrGeneratorSkill;
+using CogSearchWebApiSkills.TranslatorSkill;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.IO;
 
 
 
@@ -33,7 +35,8 @@ namespace CogSearchWebApiSkills
             string searchServiceName = keys.SearchServiceName1;
             string searchServiceApiKey = keys.SearchServiceApiKey1;
             string indexName = String.IsNullOrEmpty(req.Headers["IndexName"]) ? Config.AZURE_SEARCH_INDEX_NAME : (string)req.Headers["IndexName"];
-            if (string.IsNullOrEmpty(searchServiceName) || String.IsNullOrEmpty(searchServiceApiKey) || string.IsNullOrEmpty(indexName)) {
+            if (string.IsNullOrEmpty(searchServiceName) || String.IsNullOrEmpty(searchServiceApiKey) || string.IsNullOrEmpty(indexName))
+            {
                 return new BadRequestObjectResult($"{skillName} - Information for the search service is missing");
             }
             SearchClientHelper searchClient = new SearchClientHelper(searchServiceName, searchServiceApiKey, indexName);
@@ -59,7 +62,8 @@ namespace CogSearchWebApiSkills
 
             CryptonymLinker cryptonymLinker = new CryptonymLinker(executionContext.FunctionAppDirectory);
             WebApiSkillResponse response = WebApiSkillHelpers.ProcessRequestRecords(skillName, requestRecords,
-                (inRecord, outRecord) => {
+                (inRecord, outRecord) =>
+                {
                     string word = inRecord.Data["word"] as string;
                     if (word.All(Char.IsUpper) && cryptonymLinker.Cryptonyms.TryGetValue(word, out string description))
                     {
@@ -83,7 +87,8 @@ namespace CogSearchWebApiSkills
 
             CryptonymLinker cryptonymLinker = new CryptonymLinker(executionContext.FunctionAppDirectory);
             WebApiSkillResponse response = WebApiSkillHelpers.ProcessRequestRecords(skillName, requestRecords,
-                (inRecord, outRecord) => {
+                (inRecord, outRecord) =>
+                {
                     var words = JsonConvert.DeserializeObject<JArray>(JsonConvert.SerializeObject(inRecord.Data["words"]));
                     var cryptos = words.Select(jword =>
                     {
@@ -121,7 +126,8 @@ namespace CogSearchWebApiSkills
             ImageStore imageStore = new ImageStore(blobStorageConnectionString, blobContainerName);
 
             WebApiSkillResponse response = await WebApiSkillHelpers.ProcessRequestRecordsAsync(skillName, requestRecords,
-                async (inRecord, outRecord) => {
+                async (inRecord, outRecord) =>
+                {
                     string imageData = inRecord.Data["imageData"] as string;
                     string imageUri = await imageStore.UploadToBlob(imageData, Guid.NewGuid().ToString());
                     outRecord.Data["imageStoreUri"] = imageUri;
@@ -142,7 +148,8 @@ namespace CogSearchWebApiSkills
             }
 
             WebApiSkillResponse response = WebApiSkillHelpers.ProcessRequestRecords(skillName, requestRecords,
-                (inRecord, outRecord) => {
+                (inRecord, outRecord) =>
+                {
                     List<OcrImageMetadata> imageMetadataList = JsonConvert.DeserializeObject<List<OcrImageMetadata>>(JsonConvert.SerializeObject(inRecord.Data["ocrImageMetadataList"]));
                     Dictionary<string, string> annotations = JsonConvert.DeserializeObject<JArray>(JsonConvert.SerializeObject(inRecord.Data["wordAnnotations"]))
                                                     .Where(o => o.Type != JTokenType.Null)
@@ -159,6 +166,65 @@ namespace CogSearchWebApiSkills
                     outRecord.Data["hocrDocument"] = hocrDocument;
                     return outRecord;
                 });
+
+            return (ActionResult)new OkObjectResult(response);
+        }
+
+        /// <summary>
+        /// Note that this function can translate up to 1000 characters. If you expect to need to translate more characters, use 
+        /// the paginator skill before calling this custom enricher
+        /// </summary>
+        [FunctionName("Translate")]
+        public static IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]HttpRequest req, TraceWriter log)
+        {
+            log.Info("C# HTTP trigger function processed a request.");
+
+            string recordId = null;
+            string originalText = null;
+            string originalLanguage = null;
+            string translatedText = null;
+
+            string requestBody = new StreamReader(req.Body).ReadToEnd();
+            dynamic data = JsonConvert.DeserializeObject(requestBody);
+
+            // Validation
+            if (data?.values == null)
+            {
+                return new BadRequestObjectResult(" Could not find values array");
+            }
+            if (data?.values.HasValues == false || data?.values.First.HasValues == false)
+            {
+                // It could not find a record, then return empty values array.
+                return new BadRequestObjectResult(" Could not find valid records in values array");
+            }
+
+            recordId = data?.values?.First?.recordId?.Value as string;
+            originalText = data?.values?.First?.data?.text?.Value as string;
+            originalLanguage = data?.values?.First?.data?.language?.Value as string;
+
+            if (recordId == null)
+            {
+                return new BadRequestObjectResult("recordId cannot be null");
+            }
+
+            if (!originalLanguage.Contains("en"))
+            {
+                translatedText = Translator.TranslateText(originalText, "en").Result;
+            }
+            else
+            {
+                translatedText = originalText;
+            }
+
+            // Put together response.
+            WebApiResponseRecord responseRecord = new WebApiResponseRecord();
+            responseRecord.Data = new Dictionary<string, object>();
+            responseRecord.RecordId = recordId;
+            responseRecord.Data.Add("text", translatedText);
+
+            WebApiEnricherResponse response = new WebApiEnricherResponse();
+            response.values = new List<WebApiResponseRecord>();
+            response.values.Add(responseRecord);
 
             return (ActionResult)new OkObjectResult(response);
         }

@@ -31,6 +31,11 @@ namespace CogSearchWebApiSkills.WebApiSkills
         public List<WebApiErrorWarningContract> Warnings { get; set; } = new List<WebApiErrorWarningContract>();
     }
 
+    public class WebApiEnricherResponse
+    {
+        public List<WebApiResponseRecord> values { get; set; }
+    }
+
     public class WebApiErrorWarningContract
     {
         public string Message { get; set; }
