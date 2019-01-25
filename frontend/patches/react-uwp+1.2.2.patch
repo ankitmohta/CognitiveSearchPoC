@@ -1,0 +1,66 @@
+patch-package
+--- a/node_modules/react-uwp/NavigationView/index.d.ts
++++ b/node_modules/react-uwp/NavigationView/index.d.ts
+@@ -11,7 +11,7 @@ export declare type NavigationNode = SplitViewCommand | React.ReactNode;
+ export interface DataProps {
+     background?: string;
+     initWidth?: number;
+-    expandedWidth?: number;
++    expandedWidth?: number | string;
+     defaultExpanded?: boolean;
+     topIcon?: React.ReactElement<any>;
+     isControlled?: boolean;
+--- a/node_modules/react-uwp/NavigationView/index.js
++++ b/node_modules/react-uwp/NavigationView/index.js
+@@ -185,7 +185,6 @@ var NavigationView = (function (_super) {
+                     })))),
+             React.createElement("div", { style: {
+                     width: "100%",
+-                    height: "100%",
+                     overflow: "hidden"
+                 } }, children)));
+         return renderContent;
+@@ -246,35 +245,36 @@ function getStyles(NavigationView) {
+             position: isOverLay ? "absolute" : void 0,
+             top: isOverLay ? 0 : void 0,
+             background: isMinimal ? currBackground : void 0,
+-            transition: transition
++            transition: transition,
+         }),
+         pane: prefixStyle(__assign({ display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", background: currBackground, overflow: isMinimal ? void 0 : "hidden", width: expanded ? expandedWidth : (isMinimal ? 0 : currInitWidth) }, (isMinimal ? {
+             position: "absolute",
+             top: 0,
+             left: 0,
+-            background: currBackground
++            background: currBackground,
++            overflowY: 'auto',
+         } : void 0), { height: "100%", transition: transition }, prefixStyle(paneStyle))),
+         paneTop: prefixStyle({
+             display: "flex",
+             flexDirection: "column",
+             width: "100%",
+-            flex: "0 0 auto"
++            flex: "0 0 auto",
+         }),
+         paneTopIcons: prefixStyle({
+             display: "flex",
+             flexDirection: "column",
+             overflow: "hidden",
+-            width: (isMinimal && !expanded) ? 0 : expandedWidth,
++            width: (isMinimal && !expanded) ? 0 : Number(expandedWidth) ? expandedWidth : '100%',
+             flex: "0 0 auto",
+-            zIndex: 1
++            zIndex: 1,
+         }),
+         paneBottomIcons: prefixStyle({
+             display: "flex",
+             flexDirection: "column",
+             overflow: "hidden",
+-            width: (isMinimal && !expanded) ? 0 : expandedWidth,
++            width: (isMinimal && !expanded) ? 0 : Number(expandedWidth) ? expandedWidth : '100%',
+             flex: "0 0 auto",
+-            zIndex: 1
++            zIndex: 1,
+         }),
+         iconButton: {
+             cursor: "pointer",
