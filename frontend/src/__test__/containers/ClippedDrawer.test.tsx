@@ -5,7 +5,7 @@ import configureStore from '../../configureStore';
 import ClippedDrawer from '../../containers/ClippedDrawer';
 
 jest.mock('../../util/docs', () => ({
-    docs: []
+    docs: jest.fn(() => [])
 }))
 
 const store = configureStore();

@@ -8,5 +8,5 @@ export const graph = (g: IGraph): GraphAction => ({
     payload: {
         graph: g
     },
-    type: ACTIONS.SET_DOCUMENTS,
+    type: ACTIONS.SET_GRAPH,
 })
