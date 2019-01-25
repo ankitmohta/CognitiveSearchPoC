@@ -21,7 +21,7 @@ export interface IChecked<T> {
 }
 
 export interface IClippedDrawerProps extends React.HTMLAttributes<HTMLDivElement>{
-    children: object,
+    children?: object,
     display: string,
     docs: IDocument[],
     graph: IGraph,

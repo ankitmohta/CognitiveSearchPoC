@@ -1,0 +1,145 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App Component should match snapshot 1`] = `
+<React.Fragment>
+  <Theme
+    needGenerateAcrylic={true}
+    onGeneratedAcrylic={[Function]}
+    scrollBarStyleSelector="*"
+    theme={
+      Object {
+        "accent": "#005ba1",
+        "accentDarker1": "rgb(0, 45, 80)",
+        "accentDarker2": "rgb(0, 27, 48)",
+        "accentDarker3": "rgb(0, 9, 16)",
+        "accentLighter1": "rgb(1, 144, 255)",
+        "accentLighter2": "rgb(102, 189, 255)",
+        "accentLighter3": "rgb(204, 233, 255)",
+        "acrylicTexture40": Object {
+          "background": "rgba(0, 0, 0, 0.4)",
+        },
+        "acrylicTexture60": Object {
+          "background": "rgba(0, 0, 0, 0.6)",
+        },
+        "acrylicTexture80": Object {
+          "background": "rgba(0, 0, 0, 0.8)",
+        },
+        "altHigh": "#000",
+        "altLow": "rgba(0, 0, 0, 0.2)",
+        "altMedium": "rgba(0, 0, 0, 0.6)",
+        "altMediumHigh": "rgba(0, 0, 0, 0.8)",
+        "altMediumLow": "rgba(0, 0, 0, 0.4)",
+        "baseHigh": "#fff",
+        "baseLow": "rgba(255, 255, 255, 0.2)",
+        "baseMedium": "rgba(255, 255, 255, 0.6)",
+        "baseMediumHigh": "rgba(255, 255, 255, 0.8)",
+        "baseMediumLow": "rgba(255, 255, 255, 0.4)",
+        "chromeAltLow": "#f2f2f2",
+        "chromeBlackHigh": "#000",
+        "chromeBlackLow": "rgba(0, 0, 0, 0.2)",
+        "chromeBlackMedium": "rgba(0, 0, 0, 0.8)",
+        "chromeBlackMediumLow": "rgba(0, 0, 0, 0.4)",
+        "chromeDisabledHigh": "#333",
+        "chromeDisabledLow": "#858585",
+        "chromeHigh": "#767676",
+        "chromeLow": "#171717",
+        "chromeMedium": "#1f1f1f",
+        "chromeMediumLow": "#2b2b2b",
+        "chromeWhite": "#fff",
+        "classNames": [Function],
+        "desktopBackground": undefined,
+        "desktopBackgroundImage": "https://gratisography.com/thumbnails/gratisography-74-thumbnail.jpg",
+        "fonts": Object {
+          "sansSerifFonts": "Segoe UI, Microsoft YaHei, Open Sans, sans-serif, Hiragino Sans GB, Arial, Lantinghei SC, STHeiti, WenQuanYi Micro Hei, SimSun",
+          "segoeMDL2Assets": "Segoe MDL2 Assets",
+        },
+        "generateAcrylicTextures": [Function],
+        "haveAcrylicTextures": false,
+        "isDarkTheme": true,
+        "listAccentHigh": "rgba(0, 91, 161, 0.9)",
+        "listAccentLow": "rgba(0, 91, 161, 0.6)",
+        "listAccentMedium": "rgba(0, 91, 161, 0.8)",
+        "listLow": "rgba(255, 255, 255, 0.1)",
+        "listMedium": "rgba(255, 255, 255, 0.2)",
+        "prefixStyle": [Function],
+        "prepareStyle": [Function],
+        "prepareStyles": [Function],
+        "scrollRevealListener": undefined,
+        "scrollReveals": Array [],
+        "styleManager": undefined,
+        "themeName": "dark",
+        "toasts": Array [],
+        "typographyStyles": Object {
+          "base": Object {
+            "fontSize": 15,
+            "fontWeight": 300,
+            "lineHeight": "20px",
+          },
+          "baseAlt": Object {
+            "fontSize": 15,
+            "fontWeight": "bold",
+            "lineHeight": "20px",
+          },
+          "body": Object {
+            "fontSize": 15,
+            "fontWeight": 200,
+            "lineHeight": "20px",
+          },
+          "caption": Object {
+            "fontSize": 12,
+            "fontWeight": "lighter",
+            "lineHeight": "14px",
+          },
+          "captionAlt": Object {
+            "fontSize": 13,
+            "fontWeight": "lighter",
+            "lineHeight": "16px",
+          },
+          "header": Object {
+            "fontSize": 46,
+            "fontWeight": "lighter",
+            "lineHeight": "56px",
+          },
+          "subHeader": Object {
+            "fontSize": 34,
+            "fontWeight": "lighter",
+            "lineHeight": "40px",
+          },
+          "subTitle": Object {
+            "fontSize": 20,
+            "fontWeight": "normal",
+            "lineHeight": "24px",
+          },
+          "subTitleAlt": Object {
+            "fontSize": 18,
+            "fontWeight": "normal",
+            "lineHeight": "20px",
+          },
+          "title": Object {
+            "fontSize": 24,
+            "fontWeight": "lighter",
+            "lineHeight": "28px",
+          },
+        },
+        "useFluentDesign": true,
+        "useInlineStyle": false,
+        "zIndex": Object {
+          "calendarView": 20,
+          "commandBar": 200,
+          "contentDialog": 300,
+          "dropDownMenu": 102,
+          "flyout": 202,
+          "header": 301,
+          "listView": 10,
+          "mediaPlayer": 2147483647,
+          "toast": 310,
+          "tooltip": 201,
+        },
+      }
+    }
+    themeWillUpdate={[Function]}
+  >
+    <Connect(ClippedDrawer) />
+  </Theme>
+</React.Fragment>
+`;
