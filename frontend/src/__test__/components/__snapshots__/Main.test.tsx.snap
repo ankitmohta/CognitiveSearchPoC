@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Main Component should match snapshot 1`] = `
+<div
+  className="theme-root-2366926892 react-uwp-theme-dark"
+>
+  <RenderToBody
+    className="fluent-background-3499734374"
+  />
+  <RenderToBody>
+    <ToastWrapper />
+  </RenderToBody>
+  <Main
+    display="Maps"
+    onClick={[MockFunction]}
+    open={true}
+    views={
+      Array [
+        Object {
+          "component": <div />,
+          "display": "Maps",
+          "icon": "Map",
+        },
+      ]
+    }
+  />
+</div>
+`;
