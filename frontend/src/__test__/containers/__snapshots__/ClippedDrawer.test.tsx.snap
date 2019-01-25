@@ -1,0 +1,327 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ClippedDrawer Container should match snapshot 1`] = `
+<Context.Provider
+  value={
+    Object {
+      "store": Object {
+        "dispatch": [Function],
+        "getState": [Function],
+        "replaceReducer": [Function],
+        "subscribe": [Function],
+        Symbol(observable): [Function],
+      },
+      "storeState": Object {
+        "display": "Results",
+        "documents": Array [],
+        "graph": Object {
+          "links": Array [
+            Object {
+              "source": "A",
+              "target": "B",
+              "value": 1,
+            },
+            Object {
+              "source": "A",
+              "target": "C",
+              "value": 1,
+            },
+            Object {
+              "source": "A",
+              "target": "D",
+              "value": 1,
+            },
+            Object {
+              "source": "A",
+              "target": "E",
+              "value": 1,
+            },
+            Object {
+              "source": "F",
+              "target": "A",
+              "value": 1,
+            },
+            Object {
+              "source": "G",
+              "target": "A",
+              "value": 1,
+            },
+            Object {
+              "source": "H",
+              "target": "A",
+              "value": 1,
+            },
+            Object {
+              "source": "I",
+              "target": "A",
+              "value": 1,
+            },
+            Object {
+              "source": "J",
+              "target": "A",
+              "value": 1,
+            },
+            Object {
+              "source": "K",
+              "target": "A",
+              "value": 1,
+            },
+            Object {
+              "source": "L",
+              "target": "A",
+              "value": 1,
+            },
+            Object {
+              "source": "M",
+              "target": "A",
+              "value": 1,
+            },
+            Object {
+              "source": "B",
+              "target": "N",
+              "value": 10,
+            },
+            Object {
+              "source": "C",
+              "target": "O",
+              "value": 10,
+            },
+            Object {
+              "source": "D",
+              "target": "P",
+              "value": 10,
+            },
+            Object {
+              "source": "E",
+              "target": "Q",
+              "value": 10,
+            },
+            Object {
+              "source": "F",
+              "target": "R",
+              "value": 10,
+            },
+            Object {
+              "source": "G",
+              "target": "S",
+              "value": 10,
+            },
+            Object {
+              "source": "H",
+              "target": "T",
+              "value": 10,
+            },
+            Object {
+              "source": "I",
+              "target": "U",
+              "value": 10,
+            },
+            Object {
+              "source": "J",
+              "target": "V",
+              "value": 10,
+            },
+            Object {
+              "source": "K",
+              "target": "W",
+              "value": 10,
+            },
+            Object {
+              "source": "L",
+              "target": "X",
+              "value": 10,
+            },
+            Object {
+              "source": "M",
+              "target": "Y",
+              "value": 10,
+            },
+            Object {
+              "source": "M",
+              "target": "Z",
+              "value": 10,
+            },
+          ],
+          "nodes": Array [
+            Object {
+              "group": 1,
+              "id": "A",
+            },
+            Object {
+              "group": 2,
+              "id": "B",
+            },
+            Object {
+              "group": 2,
+              "id": "C",
+            },
+            Object {
+              "group": 2,
+              "id": "D",
+            },
+            Object {
+              "group": 2,
+              "id": "E",
+            },
+            Object {
+              "group": 2,
+              "id": "F",
+            },
+            Object {
+              "group": 2,
+              "id": "G",
+            },
+            Object {
+              "group": 2,
+              "id": "H",
+            },
+            Object {
+              "group": 2,
+              "id": "I",
+            },
+            Object {
+              "group": 2,
+              "id": "J",
+            },
+            Object {
+              "group": 2,
+              "id": "K",
+            },
+            Object {
+              "group": 2,
+              "id": "L",
+            },
+            Object {
+              "group": 2,
+              "id": "M",
+            },
+            Object {
+              "group": 3,
+              "id": "N",
+            },
+            Object {
+              "group": 3,
+              "id": "O",
+            },
+            Object {
+              "group": 3,
+              "id": "P",
+            },
+            Object {
+              "group": 3,
+              "id": "Q",
+            },
+            Object {
+              "group": 3,
+              "id": "R",
+            },
+            Object {
+              "group": 3,
+              "id": "S",
+            },
+            Object {
+              "group": 3,
+              "id": "T",
+            },
+            Object {
+              "group": 3,
+              "id": "U",
+            },
+            Object {
+              "group": 3,
+              "id": "V",
+            },
+            Object {
+              "group": 3,
+              "id": "W",
+            },
+            Object {
+              "group": 3,
+              "id": "X",
+            },
+            Object {
+              "group": 3,
+              "id": "Y",
+            },
+            Object {
+              "group": 3,
+              "id": "Z",
+            },
+          ],
+        },
+        "pins": Array [
+          Object {
+            "infobox": Object {
+              "description": "this location was entered as a longitude latitude pair \\"[36, -112]\\"",
+              "title": "Grand Canyon",
+            },
+            "location": Array [
+              36,
+              -112,
+            ],
+            "pushPin": Object {
+              "description": "Grand Canyon",
+              "options": Object {
+                "color": "orange",
+              },
+              "title": "Grand Canyon",
+            },
+          },
+          Object {
+            "infobox": Object {
+              "description": "this location was entered as an address \\"841 Avenue of the Cities\\"",
+              "title": "YASH Office",
+            },
+            "location": Array [
+              "841 Avenue of the Cities",
+            ],
+            "pushPin": Object {
+              "description": "Yash Office",
+              "options": Object {
+                "color": "#005ba1",
+              },
+              "title": "YASH",
+            },
+          },
+          Object {
+            "infobox": Object {
+              "description": "this location was entered as a longitude latitude pair \\"[45, -84]\\"",
+              "title": "Lake Superior",
+            },
+            "location": Array [
+              45,
+              -84,
+            ],
+            "pushPin": Object {
+              "description": "Lake Superior",
+              "options": Object {
+                "color": "lightgreen",
+              },
+              "title": "Lake Superior",
+            },
+          },
+          Object {
+            "infobox": Object {
+              "description": "this location was entered as the name of the location \\"Statue of Liberty\\"",
+              "title": "Statue of Liberty",
+            },
+            "location": Array [
+              "Statue of Liberty",
+            ],
+            "pushPin": Object {
+              "description": "Statue of Liberty",
+              "options": Object {
+                "color": "grey",
+              },
+              "title": "Statue of Liberty",
+            },
+          },
+        ],
+        "query": "",
+      },
+    }
+  }
+>
+  <Connect(ClippedDrawer) />
+</Context.Provider>
+`;
