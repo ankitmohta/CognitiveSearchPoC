@@ -2,7 +2,7 @@
 
 namespace CogSearchWebApiSkills.HocrGeneratorSkill
 {
-    class OcrLayoutText
+    public class OcrLayoutText
     {
         public string Language { get; set; }
         public string Text { get; set; }
