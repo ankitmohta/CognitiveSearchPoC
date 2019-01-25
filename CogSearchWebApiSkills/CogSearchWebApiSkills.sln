@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CogSearchWebApiSkills", "CogSearchWebApiSkills\CogSearchWebApiSkills.csproj", "{EF16DB0F-CD9F-4ED3-BC37-4FB0431F6994}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CogSearchWebApiSkills", "CogSearchWebApiSkills\CogSearchWebApiSkills.csproj", "{EF16DB0F-CD9F-4ED3-BC37-4FB0431F6994}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CogSearchInitializer", "CogSearchInitializer\CogSearchInitializer.csproj", "{A0C2E313-9C67-422B-BDA7-916C8C1D7550}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CogSearchInitializer", "CogSearchInitializer\CogSearchInitializer.csproj", "{A0C2E313-9C67-422B-BDA7-916C8C1D7550}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
