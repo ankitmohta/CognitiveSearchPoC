@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Title Component should match snapshot 1`] = `
+<div
+  className="theme-root-2366926892 react-uwp-theme-dark"
+>
+  <RenderToBody
+    className="fluent-background-3499734374"
+  />
+  <RenderToBody>
+    <ToastWrapper />
+  </RenderToBody>
+  <Title />
+</div>
+`;
