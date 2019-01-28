@@ -1,4 +1,4 @@
-import { defaultReduce, IReduce } from '.';
+import { defaultReduce, IReduce } from '../types';
 import { ACTIONS, IInfoboxWithPushPin, PinsAction } from '../types/pins';
 import { pins as PINS } from '../util/pins';
 

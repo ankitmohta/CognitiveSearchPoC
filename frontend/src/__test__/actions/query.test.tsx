@@ -1,4 +1,4 @@
-import { query } from '../../actions/query';
+import { setQuery } from '../../actions/query';
 import { ACTIONS, QueryAction } from '../../types/query';
 
 describe('query action creators', () => {
@@ -10,7 +10,7 @@ describe('query action creators', () => {
             },
             type: ACTIONS.SET_QUERY,
         }
-        const received: QueryAction = query(q);
+        const received: QueryAction = setQuery(q);
         expect(received).toEqual(expected);
     });
 });

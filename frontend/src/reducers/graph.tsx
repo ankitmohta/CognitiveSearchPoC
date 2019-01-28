@@ -1,4 +1,4 @@
-import { defaultReduce, IReduce } from '.';
+import { defaultReduce, IReduce } from '../types';
 import { ACTIONS, GraphAction, IGraph } from '../types/graph';
 import G from '../util/json/miserables';
 

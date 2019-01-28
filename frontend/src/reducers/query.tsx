@@ -1,4 +1,4 @@
-import { defaultReduce, IReduce } from '.';
+import { defaultReduce, IReduce } from '../types';
 import {ACTIONS, QueryAction } from '../types/query';
 
 const reduce: IReduce<string, QueryAction> = {

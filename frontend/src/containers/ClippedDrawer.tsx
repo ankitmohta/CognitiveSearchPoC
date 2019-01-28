@@ -2,8 +2,8 @@ import { connect } from 'react-redux';
 import { IDocument } from 'src/types/documents';
 import { IGraph } from 'src/types/graph';
 import { IInfoboxWithPushPin } from 'src/types/pins';
-import { display } from '../actions/display';
-import { query } from '../actions/query';
+import { setDisplay } from '../actions/display';
+import { setQuery } from '../actions/query';
 import ClippedDrawer from '../components/ClippedDrawer';
 import { IState } from '../types';
 
@@ -20,8 +20,8 @@ interface IPropsFromState extends IOwnProps {
 }
 
 interface IPropsFromDispatch {
-  onSearchClick: typeof query,
-  onViewClick: typeof display,
+  onSearchClick: typeof setQuery,
+  onViewClick: typeof setDisplay,
 }
 
 const mapStateToProps = (state: IState, ownProps: IOwnProps): IPropsFromState => ({
@@ -34,8 +34,8 @@ const mapStateToProps = (state: IState, ownProps: IOwnProps): IPropsFromState =>
 })
 
 const mapDispatchToProps: IPropsFromDispatch = ({
-  onSearchClick: query,
-  onViewClick: display,
+  onSearchClick: setQuery,
+  onViewClick: setDisplay,
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ClippedDrawer);

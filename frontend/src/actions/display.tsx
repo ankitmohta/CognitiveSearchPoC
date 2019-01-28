@@ -1,12 +1,12 @@
 import { ACTIONS, DisplayAction } from '../types/display';
 
 /**
- * creates a display action to dispatch
- * @param {string} d the display to enter into the action's payload
+ * creates a setDisplay action to dispatch
+ * @param {string} display the display to enter into the action's payload
  */
-export const display = (d: string): DisplayAction => ({
+export const setDisplay = (display: string): DisplayAction => ({
     payload: {
-        display: d
+        display
     },
     type: ACTIONS.SET_DISPLAY,
 })

@@ -1,4 +1,4 @@
-import { graph } from '../../actions/graph';
+import { setGraph } from '../../actions/graph';
 import { ACTIONS, GraphAction, IGraph } from '../../types/graph';
 
 describe('graph action creators', () => {
@@ -10,7 +10,7 @@ describe('graph action creators', () => {
             },
             type: ACTIONS.SET_GRAPH,
         }
-        const received: GraphAction = graph(g);
+        const received: GraphAction = setGraph(g);
         expect(received).toEqual(expected);
     });
 });

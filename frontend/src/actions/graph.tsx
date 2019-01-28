@@ -2,11 +2,11 @@ import { ACTIONS, GraphAction, IGraph } from '../types/graph';
 
 /**
  * creates a graph action to dispatch
- * @param {IGraph} g the graph to enter into the action's payload
+ * @param {IGraph} graph the graph to enter into the action's payload
  */
-export const graph = (g: IGraph): GraphAction => ({
+export const setGraph = (graph: IGraph): GraphAction => ({
     payload: {
-        graph: g
+        graph,
     },
     type: ACTIONS.SET_GRAPH,
 })

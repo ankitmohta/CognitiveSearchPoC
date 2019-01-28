@@ -1,4 +1,4 @@
-import { pins } from '../../actions/pins';
+import { setPins } from '../../actions/pins';
 import { ACTIONS, IInfoboxWithPushPin, PinsAction } from '../../types/pins';
 
 describe('pins action creators', () => {
@@ -10,7 +10,7 @@ describe('pins action creators', () => {
             },
             type: ACTIONS.SET_PINS,
         }
-        const received: PinsAction = pins(p);
+        const received: PinsAction = setPins(p);
         expect(received).toEqual(expected);
     });
 });

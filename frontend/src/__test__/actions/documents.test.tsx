@@ -1,4 +1,4 @@
-import { documents } from '../../actions/documents';
+import { setDocuments } from '../../actions/documents';
 import { ACTIONS, DocumentsAction, IDocument } from '../../types/documents';
 
 describe('documents action creators', () => {
@@ -10,7 +10,7 @@ describe('documents action creators', () => {
             },
             type: ACTIONS.SET_DOCUMENTS,
         }
-        const received: DocumentsAction = documents(docs);
+        const received: DocumentsAction = setDocuments(docs);
         expect(received).toEqual(expected);
     });
 });

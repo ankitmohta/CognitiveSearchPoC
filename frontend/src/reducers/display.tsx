@@ -1,4 +1,4 @@
-import { defaultReduce, IReduce } from '.';
+import { defaultReduce, IReduce } from '../types';
 import {ACTIONS, DisplayAction } from '../types/display';
 
 const reduce: IReduce<string, DisplayAction> = {

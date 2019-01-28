@@ -1,4 +1,4 @@
-import { display } from '../../actions/display';
+import { setDisplay } from '../../actions/display';
 import { ACTIONS, DisplayAction } from '../../types/display';
 
 describe('display action creators', () => {
@@ -10,7 +10,7 @@ describe('display action creators', () => {
             },
             type: ACTIONS.SET_DISPLAY,
         }
-        const received: DisplayAction = display(d);
+        const received: DisplayAction = setDisplay(d);
         expect(received).toEqual(expected);
     });
 });

@@ -1,4 +1,4 @@
-import { defaultReduce, IReduce } from '.';
+import { defaultReduce, IReduce } from '../types';
 import { ACTIONS, DocumentsAction, IDocument } from '../types/documents';
 import { docs } from '../util/docs';
 
