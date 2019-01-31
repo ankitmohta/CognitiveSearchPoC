@@ -10,7 +10,7 @@ class Map extends React.Component<IMapProps> {
     public render() {
         return(
                 <ReactBingmaps
-                  bingmapKey={process.env.REACT_APP_BINGMAPS_KEY as string}
+                  bingmapKey={(process.env.BINGMAPS_KEY || process.env.REACT_APP_BINGMAPS_KEY) as string}
                   infoboxesWithPushPins={
                     this.props.infoboxesWithPushPins ? this.props.infoboxesWithPushPins.map(i => ({
                       addHandler:"mouseover",
