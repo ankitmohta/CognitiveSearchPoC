@@ -22,5 +22,7 @@ export interface IActionType<T> {
 
 export interface IAction<P, T> {
     payload: P,
+    posts?: any,
+    receivedAt?: number,
     type: T,
 }

@@ -13,7 +13,7 @@ export interface IAzPayload {
     count?: boolean,
     // facets,
     // filters,
-    minimumCoverage: number,
+    minimumCoverage?: number,
     orderBy?: IAzOrderBy[],
     searchFields?: string[],
     searchMode?: AzSearchMode,
@@ -31,7 +31,7 @@ export interface IAzPayload {
 const parseOrderByGET = (orderby: IAzOrderBy): string => `${orderby.fieldName} ${orderby.order}`;
 
 export const parsePayloadGET = (payload: IAzPayload): string => [
-    payload.search ? `search=${payload.search}` : '',
+    payload.search ? `search=${global.encodeURI(payload.search)}` : '',
     payload.searchMode === 'all' ? 'searchMode=all' : '',
     isArrayEmpty(payload.searchFields) ? '' : `searchFields=${payload.searchFields!.join(',')}`,
     isArrayEmpty(payload.orderBy) ? '' : `$orderby=${payload.orderBy!.map(parseOrderByGET).join(',')}`,
@@ -48,3 +48,7 @@ export const parsePayloadGET = (payload: IAzPayload): string => [
     payload.scoringProfile ? `scoringProfile=${payload.scoringProfile}` : '',
     payload.highlight ? `highlight=${payload.highlight}` : '',
 ].filter(i => i).join('&');
+
+export const defaultPayload = (search: string): string => (parsePayloadGET({
+    search
+}))

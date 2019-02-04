@@ -1,7 +1,10 @@
 import { IAction, IActionType } from './';
 
 export const ACTIONS: IActionType<string> = {
-    SET_QUERY: 'SET_QUERY'
+    INVALIDATE_QUERY: 'INVALIDATE_QUERY',
+    RECEIVE_QUERY: 'RECEIVE_QUERY',
+    REQUEST_QUERY: 'REQUEST_QUERY',
+    SET_QUERY: 'SET_QUERY',
 }
 
 export interface IPayload {

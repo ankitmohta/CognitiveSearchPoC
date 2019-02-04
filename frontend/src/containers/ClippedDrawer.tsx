@@ -3,7 +3,7 @@ import { IDocument } from 'src/types/documents';
 import { IGraph } from 'src/types/graph';
 import { IInfoboxWithPushPin } from 'src/types/pins';
 import { setDisplay } from '../actions/display';
-import { setQuery } from '../actions/query';
+import { fetchQuery } from '../actions/query';
 import ClippedDrawer from '../components/ClippedDrawer';
 import { IState } from '../types';
 
@@ -20,7 +20,7 @@ interface IPropsFromState extends IOwnProps {
 }
 
 interface IPropsFromDispatch {
-  onSearchClick: typeof setQuery,
+  onSearchClick: typeof fetchQuery,
   onViewClick: typeof setDisplay,
 }
 
@@ -34,7 +34,7 @@ const mapStateToProps = (state: IState, ownProps: IOwnProps): IPropsFromState =>
 })
 
 const mapDispatchToProps: IPropsFromDispatch = ({
-  onSearchClick: setQuery,
+  onSearchClick: fetchQuery,
   onViewClick: setDisplay,
 })
 
