@@ -340,13 +340,10 @@ ASALocalRun/
 # BeatPulse healthcheck temp database 
 healthchecksdb
 
-<<<<<<< HEAD
-=======
 
 #New Additions for Cogntive Search Project
 keys.cs
 
->>>>>>> origin/master
 # Frontend
 # dependencies
 frontend/node_modules
