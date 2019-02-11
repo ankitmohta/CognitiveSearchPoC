@@ -206,6 +206,7 @@ namespace CogSearchInitializer
                 if (_azureFunctionHostKey == null)
                 {
                     _azureFunctionHostKey = await Keys.GetAzureFunctionHostKey(_httpClient);
+                    Console.WriteLine(_azureFunctionHostKey.ToString());
                 }
                 using (StreamReader r = new StreamReader("skillset.json"))
                 {
@@ -274,9 +275,9 @@ namespace CogSearchInitializer
                 using (StreamReader r = new StreamReader("index.json"))
                 {
                     string json = r.ReadToEnd();
-                    json = json.Replace("[SynonymMapName", SynonymMapName);
+                    json = json.Replace("[SynonymMapName]", SynonymMapName);
                     string uri = String.Format("{0}/indexes/{1}?api-version=2017-11-11-Preview", _searchServiceEndpoint, IndexName);
-                    HttpContent content = new StringContent(json, Encoding.UTF8, "application.json");
+                    HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
                     HttpResponseMessage response = await _httpClient.PutAsync(uri, content);
                     if (DebugMode)
                     {
@@ -316,7 +317,7 @@ namespace CogSearchInitializer
                     json = json.Replace("[IndexerName]", IndexerName);
                     json = json.Replace("[DataSourceName]", DataSourceName);
                     json = json.Replace("[IndexName]", IndexName);
-                    json = json.Replace("[SkillsetName]", SkillSetName);
+                    json = json.Replace("[SkillSetName]", SkillSetName);
                     string uri = String.Format("{0}/indexers/{1}?api-version=2017-11-11-Preview", _searchServiceEndpoint, IndexerName);
                     HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
                     HttpResponseMessage response = await _httpClient.PutAsync(uri, content);

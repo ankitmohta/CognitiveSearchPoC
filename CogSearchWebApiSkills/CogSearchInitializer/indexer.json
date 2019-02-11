@@ -50,7 +50,7 @@
             "targetFieldName": "entities"
         },
         {
-            "sourceFieldName": "/document/finalText/pages/*/locations/*/value",
+            "sourceFieldName": "/document/finalText/pages/*/locations/*",
             "targetFieldName": "locations"
         },
         {

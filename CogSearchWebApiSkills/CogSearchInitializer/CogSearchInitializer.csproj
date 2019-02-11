@@ -52,4 +52,16 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="App.config"/>
+    <None Include="index.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="indexer.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None><None Include="skillset.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
